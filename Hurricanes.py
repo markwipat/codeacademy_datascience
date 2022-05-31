@@ -38,7 +38,7 @@ def damage_calc(damages):
       damages_scaled.append(float(x[0:x.find("B")])*conversion["B"])
   return damages_scaled
 
-damage_calc(damages)
+damages_scaled = damage_calc(damages)
 #print(damages_scaled)
 
 
@@ -138,7 +138,7 @@ def find_most_deadly(hurricanes_dict):
 
 max_death_count, cane_name = find_most_deadly(hurricanes_dict)
 
-print(cane_name, max_death_count)
+#print(cane_name, max_death_count)
 
 
 # 7
@@ -162,19 +162,47 @@ def rate_hurricanes_by_mortality(hurricanes_dict):
 
 rate_hurricanes_by_mortality(hurricanes_dict)
 
-
-
 # 8 Calculating Hurricane Maximum Damage
-
 # find highest damage inducing hurricane and its total cost
 
+def hurricanes_max_dmg(hurricanes_dict):
+    maxdmg_name = ""
+    maxdmg_value = 0
+    for i in hurricanes_dict:
+        if hurricanes_dict[i]["Damages"] != "Damages not recorded":
+            if int(hurricanes_dict[i]["Damages"]) > maxdmg_value:
+                maxdmg_name = hurricanes_dict[i]["Names"]
+                maxdmg_value = hurricanes_dict[i]["Damages"]
+    return maxdmg_name, maxdmg_value
+
+maxdmg_name, maxdmg_value = hurricanes_max_dmg(hurricanes_dict)
+print(maxdmg_name, maxdmg_value)
 
 # 9
 # Rating Hurricanes by Damage
+
 damage_scale = {0: 0,
                 1: 100000000,
                 2: 1000000000,
                 3: 10000000000,
                 4: 50000000000}
   
-# categorize hurricanes in new dictionary with damage severity as key
+def rate_hurricanes_by_damages(hurricanes_dict):
+    hurricanes_damages_rating = {0:[],1:[],2:[],3:[],4:[],5:[]}
+    for i in hurricanes_dict:
+        if hurricanes_dict[i]["Damages"] != "Damages not recorded":
+            if hurricanes_dict[i]["Damages"] >= damage_scale[0] and hurricanes_dict[i]["Damages"] < damage_scale[1]:
+                hurricanes_damages_rating[0].append(hurricanes_dict[i])
+            elif hurricanes_dict[i]["Damages"] >= damage_scale[1] and hurricanes_dict[i]["Damages"] < damage_scale[2]:
+                hurricanes_damages_rating[1].append(hurricanes_dict[i])
+            elif hurricanes_dict[i]["Damages"] >= damage_scale[2] and hurricanes_dict[i]["Damages"] < damage_scale[3]:
+                hurricanes_damages_rating[2].append(hurricanes_dict[i])
+            elif hurricanes_dict[i]["Damages"] >= damage_scale[3] and hurricanes_dict[i]["Damages"] < damage_scale[4]:
+                hurricanes_damages_rating[3].append(hurricanes_dict[i])
+            elif hurricanes_dict[i]["Damages"] >= damage_scale[4]:
+                hurricanes_damages_rating[4].append(hurricanes_dict[i])
+    return hurricanes_damages_rating
+
+hurricanes_damages_rating = rate_hurricanes_by_damages(hurricanes_dict)
+print(hurricanes_damages_rating)
+
